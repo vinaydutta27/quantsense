@@ -1,0 +1,8 @@
+.xva .path-switch a[href="frtb.html"],.xva .path-switch a[href="stochastic.html"]{background:transparent;color:#c5dbd6;border-color:#395753}
+.xva .path-switch a[aria-current="page"]{background:#36534a;color:#dbffb6;border-color:#738d58}
+.xva .source-banner{border-color:#82a999;background:#e8f2ed;line-height:1.7}
+.xva .stats strong{font-size:clamp(19px,2vw,26px)}
+.xva .reading a{display:inline-block;margin:5px 12px 5px 0}
+.xva .chart-wrap{overflow:hidden}
+.xva .formula{white-space:pre-wrap;line-height:1.8}
+.xva .controls select{width:100%}
