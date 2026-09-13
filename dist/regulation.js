@@ -1,6 +1,6 @@
 (() => {
  const {sources,topics}=REGULATION_DATA,$=id=>document.getElementById(id),esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
- let active='architecture',jurisdiction='pra',mode='navigator';
+ let active='architecture',jurisdiction='pra',mode='comparator';
  const sourceCard=(key,entry,compact=false)=>{const s=sources[key];return `${compact?'<article class="compare-card">':'<div>'}<header class="source-head"><div><h3>${esc(s.name)}</h3><p>${esc(s.title)}</p></div><span class="status">${esc(s.status)}</span></header><div class="source-body"><section><h4>SOURCE REFERENCE</h4><a class="reference-link" href="${s.url}#page=${entry.page}" target="_blank" rel="noopener">${esc(entry.ref)} <span>↗</span></a><p class="reference-page">PDF page ${entry.page} · open the complete provision</p></section><section><h4>PLAIN-LANGUAGE INTERPRETATION</h4><p>${esc(entry.interpretation)}</p></section><section><h4>CALCULATION IMPLICATION</h4><p>${esc(entry.implication)}</p></section></div>${compact?'</article>':'</div>'}`};
  function filtered(){const q=$('topic-search').value.trim().toLowerCase();return q?topics.filter(t=>(t.name+' '+t.keywords+' '+t.question+' '+t.group).toLowerCase().includes(q)):topics;}
  function options(){const list=filtered();$('topic').innerHTML=list.map(t=>`<option value="${t.id}" ${t.id===active?'selected':''}>${esc(t.group)} · ${esc(t.name)}</option>`).join('');if(!list.some(t=>t.id===active)&&list.length)active=list[0].id;$('topic').value=active;return list;}
