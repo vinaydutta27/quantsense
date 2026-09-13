@@ -5,6 +5,7 @@ const { chromium } = require('/Users/vinaydutta/.cache/codex-runtimes/codex-prim
 const appPages = ['index.html', 'stochastic.html', 'frtb.html', 'cva.html', 'saccr.html'];
 const seoPages = ['about.html', 'contact.html', 'contact-thanks.html', 'faq.html', 'glossary.html', 'learning-paths.html', 'methodology.html', 'privacy.html'];
 const allPages = [...appPages, ...seoPages, 'regulation.html'];
+const root = process.env.QUANTSENSE_TEST_URL || 'http://localhost:8770';
 const utility = ['Learning paths', 'Glossary', 'Regulation', 'Methodology', 'About', 'FAQ', 'Contact', 'Privacy'];
 const learning = ['Risk sensitivities', 'Stochastic calculus', 'FRTB · Market risk', 'SA-CVA · Counterparty risk', 'SA-CCR · Exposure', 'Regulation navigator'];
 
@@ -24,7 +25,7 @@ for (const name of allPages) {
   for (const width of [390, 768, 1440]) {
     await page.setViewportSize({ width, height: 900 });
     for (const name of allPages) {
-      const response = await page.goto(`http://localhost:8770/${name}`, { waitUntil: 'domcontentloaded' });
+      const response = await page.goto(`${root}/${name}`, { waitUntil: 'domcontentloaded' });
       assert(response && response.ok(), `${name}: page failed to load`);
       assert(!(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)), `${name}: horizontal overflow at ${width}px`);
 
