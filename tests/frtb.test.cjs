@@ -2,7 +2,7 @@ const fs=require('fs'),vm=require('vm'),assert=require('node:assert/strict');
 const elements={},attrs={};let registered;
 const el=id=>elements[id]??=( {textContent:'',innerHTML:'',clientWidth:700,setAttribute(k,v){(attrs[id]??={})[k]=v;}} );
 const ctx={console,Math,Number,Object,Array,Promise,Error,Set,history:{replaceState(){}},location:{hash:''},document:{getElementById:el,querySelectorAll:()=>[],modelContext:{registerTool:t=>registered=t}},addEventListener(){}};ctx.window=ctx;vm.createContext(ctx);
-for(const f of ['learning.js','sc-math.js','frtb-math.js','frtb-lessons.js','frtb-sa.js','frtb-ima.js','frtb-content.js','frtb.js'])vm.runInContext(fs.readFileSync('dist/'+f,'utf8'),ctx,{filename:f});
+for(const f of ['learning.js','sc-math.js','frtb-math.js','frtb-lessons.js','frtb-sa.js','frtb-ima.js','frtb-content.js','frtb-explorers.js','frtb-data-tests.js','frtb-explorer-content.js','frtb.js'])vm.runInContext(fs.readFileSync('dist/'+f,'utf8'),ctx,{filename:f});
 const F=ctx.FRTB,L=ctx.FRTB_LESSONS,close=(a,b,t=1e-8)=>assert(Math.abs(a-b)<t,`${a} != ${b}`),defaults=l=>Object.fromEntries(l.inputs.map(d=>[d.id,d.value]));
 // Independently check regulatory boundaries and arithmetic, not just finite output.
 close(F.scenario(.9,'high'),1);close(F.scenario(.9,'low'),.8);close(F.scenario(.2,'low'),.15);
@@ -22,7 +22,7 @@ assert.deepEqual(Array.from(F.ranks([1,1,2])),[1.5,1.5,3]);
 close(F.multiplier(4),1.5);close(F.multiplier(5),1.7);close(F.multiplier(9),1.92);close(F.multiplier(10),2);
 close(F.maturity(.01),.25);close(F.maturity(2),1);
 close(F.drc([{jtd:100,rw:.06}],[{jtd:50,rw:.06}]).capital,4);close(F.drc([],[{jtd:100,rw:.5}]).capital,0);
-assert.equal(L.length,24);assert.equal(new Set(L.map(l=>l.id)).size,24);
+assert.equal(L.length,27);assert.equal(new Set(L.map(l=>l.id)).size,27);
 let checks=0;
 function inspect(l,s){const r=l.compute(s);assert(r.explanation.length>40,l.id);assert(r.rows.length&&r.headers.length,l.id);assert(!/NaN|Infinity|undefined/.test(JSON.stringify(r)),l.id+' malformed result');if(r.bars)r.bars.forEach(d=>assert(Number.isFinite(d.value),l.id));if(r.series)r.series.forEach(line=>line.data.forEach(p=>assert(p.every(Number.isFinite),l.id)));checks++;return r;}
 for(const l of L){const d=defaults(l);inspect(l,d);for(const input of l.inputs){const vals=input.options?input.options.map(o=>o[0]):[input.min,input.max];for(const value of vals)inspect(l,{...d,[input.id]:value});}
@@ -41,9 +41,9 @@ const rr=L.find(l=>l.id==='rrao');assert.equal(inspect(rr,{...defaults(rr),eligi
 const gov=L.find(l=>l.id==='governance');assert.equal(inspect(gov,{...defaults(gov),year:'2028',zone:'Red'}).stats[0][1],'IMA');assert.equal(inspect(gov,{...defaults(gov),year:'steady',zone:'Red'}).stats[0][1],'SA fallback');
 const before=ctx.FRTB_APP.getState();for(const bad of [{lesson:'missing'},{lesson:'girr',values:{a:Infinity}},{lesson:'girr',values:{a:1}},{lesson:'plat',values:{previous:'invalid'}}])assert.throws(()=>registered.execute(bad));assert.equal(JSON.stringify(before),JSON.stringify(ctx.FRTB_APP.getState()));
 // Exercise real slider and reset callbacks in the DOM stub.
-registered.execute({lesson:'frtb-map'});el('f-sbm').oninput({target:{value:'50',setAttribute(){}}});assert.equal(ctx.FRTB_APP.getState().stats[0][1],'£67.00m');el('reset').onclick();assert.equal(ctx.FRTB_APP.getState().stats[0][1],'£57.00m');el('next').onclick();assert.equal(ctx.FRTB_APP.getState().lesson,'sbm');
-const q=[];for(const l of L){const c=ctx.LEARNING_CONTENT[l.id];assert.equal(c.intuition.length,2);assert.equal(c.questions.length,10);c.questions.forEach(([question,answer])=>{assert(question.endsWith('?'),question);assert(answer.length>25);q.push(question)})}assert.equal(new Set(q).size,240);
+registered.execute({lesson:'frtb-map'});el('f-sbm').oninput({target:{value:'50',setAttribute(){}}});assert.equal(ctx.FRTB_APP.getState().stats[0][1],'£67.00m');el('reset').onclick();assert.equal(ctx.FRTB_APP.getState().stats[0][1],'£57.00m');el('next').onclick();assert.equal(ctx.FRTB_APP.getState().lesson,'trade-capital');
+const q=[];for(const l of L){const c=ctx.LEARNING_CONTENT[l.id];assert.equal(c.intuition.length,2);assert.equal(c.questions.length,10);c.questions.forEach(([question,answer])=>{assert(question.endsWith('?'),question);assert(answer.length>25);q.push(question)})}assert.equal(new Set(q).size,270);
 // Buildless static checks: all local resources and navigation targets exist.
 for(const file of ['index.html','stochastic.html','frtb.html']){const html=fs.readFileSync('dist/'+file,'utf8');assert(html.includes('href="frtb.html"'));for(const [,path]of html.matchAll(/(?:src|href)="([^"#]+)"/g)){if(path.startsWith('data:')||path.includes('://')||path==='./')continue;assert(fs.existsSync('dist/'+path),file+' missing '+path)}}
-console.log(`PASS: ${checks} calculator cases; 24 rendered lessons; all 7 × 3 SBM modes; 240 unique conceptual questions; rule boundaries, interactions and local assets.`);
-console.log('DOM and WebMCP tests use a stub. Live browser inspection was blocked by the browser security policy check; these tests do not substitute for visual QA.');
+console.log(`PASS: ${checks} calculator cases; 27 rendered lessons; all 7 × 3 SBM modes; 270 unique conceptual questions; rule boundaries, interactions and local assets.`);
+console.log('This suite uses DOM stubs; tests/browser.cjs separately checks live browser interactions and responsive layouts.');

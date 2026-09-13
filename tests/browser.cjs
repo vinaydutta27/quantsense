@@ -1,0 +1,17 @@
+const {chromium}=require('/Users/vinaydutta/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const assert=require('node:assert/strict'),fs=require('fs');
+(async()=>{
+ const browser=await chromium.launch({executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',headless:true}),page=await browser.newPage({viewport:{width:1440,height:1000}}),errors=[];page.on('pageerror',e=>errors.push(e.message));
+ const root=process.env.QUANTSENSE_TEST_URL||'http://localhost:8770',out='/private/tmp/quantsense-risk-review';fs.mkdirSync(out,{recursive:true});
+ await page.goto(root+'/',{waitUntil:'networkidle'});assert((await page.title()).includes('DV01'));assert.equal(await page.locator('#lessons button').count(),6);
+ for(const id of ['dv01','cs01','delta','gamma','vega','curvature']){await page.evaluate(id=>window.RISK_APP.configure({lesson:id}),id);assert.equal(await page.locator('.concept-questions li').count(),10);assert(!(await page.locator('#chart').innerHTML()).includes('NaN'));}
+ await page.evaluate(()=>window.RISK_APP.configure({lesson:'gamma',values:{hedge:100,expiry:.25}}));await page.screenshot({path:out+'/risk-desktop.png',fullPage:true});
+ await page.locator('#f-spot').fill('110');await page.locator('#f-spot').dispatchEvent('input');assert.equal(await page.evaluate(()=>RISK_APP.getState().values.spot),110);await page.locator('#reset').click();assert.equal(await page.evaluate(()=>RISK_APP.getState().values.spot),100);
+ await page.goto(root+'/frtb.html#trade-capital',{waitUntil:'networkidle'});assert.equal(await page.locator('#lessons button').count(),27);
+ await page.locator('#f-trade').selectOption('fx');assert((await page.locator('#explanation').innerText()).includes('Exchange-rate'));await page.screenshot({path:out+'/trade-desktop.png',fullPage:true});
+ await page.evaluate(()=>FRTB_APP.configure({lesson:'data-tests'}));for(const principle of ['construction','capture','preserve','compare','review','freshness','stress','proxy']){await page.locator('#f-principle').selectOption(principle);assert(!(await page.locator('#chart').innerHTML()).includes('NaN'));assert((await page.locator('#trace tbody tr').count())>=4);}
+ await page.locator('#f-principle').selectOption('compare');await page.screenshot({path:out+'/data-desktop.png',fullPage:true});
+ await page.evaluate(()=>FRTB_APP.configure({lesson:'optimisation'}));for(const mode of ['netting','maturity','mapping','index']){await page.locator('#f-mode').selectOption(mode);assert(!(await page.locator('#stats').innerText()).includes('NaN'));}await page.screenshot({path:out+'/sandbox-desktop.png',fullPage:true});
+ for(const width of [390,768,1440]){await page.setViewportSize({width,height:900});for(const path of ['/#gamma','/frtb.html#trade-capital','/frtb.html#data-tests','/frtb.html#optimisation','/stochastic.html','/cva.html','/saccr.html']){await page.goto(root+path,{waitUntil:'load'});await page.waitForTimeout(150);const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1);assert(!overflow,`${path} overflows at ${width}px`);if(width===390&&path==='/#gamma')await page.screenshot({path:out+'/risk-mobile.png',fullPage:true});}}
+ assert.deepEqual(errors,[]);await browser.close();console.log('PASS: browser navigation, inputs, reset, all data principles and sandbox modes; no page errors or page overflow at 390, 768 and 1440px. Screenshots: '+out);
+})().catch(e=>{console.error(e);process.exit(1)});
