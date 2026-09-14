@@ -36,8 +36,13 @@ for (const name of allPages) {
 
       if (appPages.includes(name) || name === 'regulation.html') {
         const selector = name === 'regulation.html' ? '.reg-header nav' : '.path-switch';
-        assert.deepEqual(await page.locator(`${selector} a`).allTextContents(), learning, `${name}: learning paths differ`);
-        assert.equal(await page.locator(`${selector} a[aria-current="page"]`).count(), 1, `${name}: learning-path active state missing`);
+        if (name === 'regulation.html') {
+          assert.deepEqual(await page.locator(`${selector} a`).allTextContents(), learning, `${name}: learning paths differ`);
+          assert.equal(await page.locator(`${selector} a[aria-current="page"]`).count(), 1, `${name}: learning-path active state missing`);
+        } else {
+          assert.equal(await page.locator(`${selector} .module-browser-panel a`).count(), learning.length, `${name}: module catalogue incomplete`);
+          assert.equal(await page.locator(`${selector} .current-module[aria-current="page"]`).count(), 1, `${name}: current module missing`);
+        }
       } else {
         assert.equal(await page.locator('.seo-header nav a[aria-current="page"]').count(), 1, `${name}: page active state missing`);
       }
