@@ -2,7 +2,7 @@
   const path = document.querySelector('.path-switch');
   if (!path || path.dataset.compact === 'true') return;
   const links = [...path.querySelectorAll('a')];
-  const groups = [['Foundations',['Risk sensitivities','Stochastic calculus','Yield curves · Bootstrapping']],['Market & trading risk',['FRTB · Market risk','SIMM · Initial margin','IRRBB · Banking book']],['Credit & counterparty risk',['Credit risk · IFRS 9','SA-CVA · Counterparty risk','SA-CCR · Exposure','XVA · Valuation adjustments']],['Regulation & funding',['FRTB Regulation Divergences','Liquidity · Funding risk']]];
+  const groups = [['Foundations',['Risk sensitivities','Stochastic calculus','Yield curves · Bootstrapping']],['Market & trading risk',['FRTB · Market risk','SIMM · Initial margin']],['Credit & counterparty risk',['Credit risk · IFRS 9','SA-CVA · Counterparty risk','SA-CCR · Exposure','XVA · Valuation adjustments']],['Treasury & banking book',['Treasury · Balance-sheet risk','IRRBB · Banking book','Liquidity · Funding risk']],['Regulation',['FRTB Regulation Divergences']]];
   const current = links.find(a => a.getAttribute('aria-current') === 'page') || links[0];
   const details = document.createElement('details'); details.className='module-browser'; details.innerHTML='<summary><span>Browse modules</span><b aria-hidden="true">⌄</b></summary>';
   const panel=document.createElement('div'); panel.className='module-browser-panel';
