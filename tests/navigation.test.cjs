@@ -2,12 +2,12 @@ const fs = require('fs');
 const assert = require('node:assert/strict');
 const { chromium } = require('/Users/vinaydutta/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
 
-const appPages = ['sensitivities.html', 'stochastic.html', 'frtb.html', 'cva.html', 'saccr.html', 'xva.html', 'irrbb.html', 'yield.html', 'liquidity.html'];
+const appPages = ['sensitivities.html', 'credit.html', 'stochastic.html', 'frtb.html', 'cva.html', 'saccr.html', 'xva.html', 'irrbb.html', 'yield.html', 'liquidity.html'];
 const seoPages = ['index.html', 'about.html', 'contact.html', 'contact-thanks.html', 'faq.html', 'glossary.html', 'learning-paths.html', 'methodology.html', 'privacy.html'];
 const allPages = [...appPages, ...seoPages, 'regulation.html'];
 const root = process.env.QUANTSENSE_TEST_URL || 'http://localhost:8770';
 const utility = ['Learning paths', 'Glossary', 'Regulation', 'Methodology', 'About', 'FAQ', 'Contact', 'Privacy'];
-const learning = ['Risk sensitivities', 'Stochastic calculus', 'FRTB · Market risk', 'SA-CVA · Counterparty risk', 'SA-CCR · Exposure', 'XVA · Valuation adjustments', 'IRRBB · Banking book', 'Yield curves · Bootstrapping', 'Liquidity · Funding risk', 'FRTB Regulation Divergences'];
+const learning = ['Risk sensitivities', 'Credit risk · IFRS 9', 'Stochastic calculus', 'FRTB · Market risk', 'SA-CVA · Counterparty risk', 'SA-CCR · Exposure', 'XVA · Valuation adjustments', 'IRRBB · Banking book', 'Yield curves · Bootstrapping', 'Liquidity · Funding risk', 'FRTB Regulation Divergences'];
 
 for (const name of allPages) {
   const html = fs.readFileSync(`dist/${name}`, 'utf8');
