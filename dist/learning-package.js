@@ -35,6 +35,12 @@
       <h2 id="learning-package-title">Build practical understanding of ${title}</h2>
       <p>The ${title} learning package can help you develop a practical understanding of this subject. Use its structured study material and exercises to ${outcome}.</p>
       <p class="learning-package-note">All lessons and visualisations in this module remain free to use. The package is an optional next step.</p>
+      <div class="learning-package-readiness" role="note" aria-labelledby="learning-package-readiness-title">
+        <span class="learning-package-readiness-label">BEFORE YOU BUY</span>
+        <h3 id="learning-package-readiness-title">Advanced users only</h3>
+        <p>This package assumes you already understand the fundamentals of ${title} and are ready for deeper, practical study.</p>
+        <p><strong>New to the subject? Please don’t buy this package yet.</strong> Spend time with the free lessons and interactive tools on this page first. Come back when you can explain the fundamentals with confidence.</p>
+      </div>
       <a class="learning-package-cta" href="${url}" target="_blank" rel="noopener noreferrer sponsored">View the ${title} package <span aria-hidden="true">↗</span><span class="learning-package-sr"> (opens Topmate in a new tab)</span></a>
     </div>
     <details class="learning-package-preview">
