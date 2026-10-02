@@ -1,0 +1,109 @@
+{
+  "goals": [
+    {
+      "id": "interview",
+      "label": "Prepare for an interview",
+      "summary": "Practise the concepts and explain your reasoning.",
+      "routes": [
+        {
+          "id": "market-risk",
+          "label": "Market risk & FRTB",
+          "title": "Explain how market risk becomes capital.",
+          "intro": "Build the intuition, follow the calculation and practise explaining the assumptions behind the result.",
+          "steps": [
+            {"module": "sensitivities", "title": "Build your risk vocabulary", "detail": "Use delta, vega and curvature to explain how a position responds to market moves."},
+            {"module": "frtb", "title": "Connect sensitivities to capital", "detail": "Work through FRTB SA and IMA, then explain aggregation, diversification and model checks."},
+            {"module": "regulation", "title": "Discuss the implementation context", "detail": "Compare the FRTB frameworks and explain why jurisdiction and rule status matter."}
+          ],
+          "package": "frtb",
+          "reason": "FRTB interview questions, worked cases and revision flashcards help you turn the calculations into clear explanations.",
+          "practice": "Explain one capital calculation aloud, including its inputs, assumptions and a limitation."
+        },
+        {
+          "id": "credit-risk",
+          "label": "Credit risk",
+          "title": "Explain what drives a credit loss.",
+          "intro": "Follow three focused lessons in the Credit Risk module, then practise defending the assumptions in a worked case.",
+          "steps": [
+            {"module": "credit", "href": "credit.html#portfolio", "title": "Connect PD, LGD and EAD", "detail": "Start with the portfolio loss explorer and explain the ingredients of expected loss."},
+            {"module": "credit", "href": "credit.html#dependence", "title": "Stress the portfolio", "detail": "Explore default dependence and explain why losses can cluster in stressed conditions."},
+            {"module": "credit", "href": "credit.html#capital", "title": "Distinguish loss and capital", "detail": "Compare accounting loss, provisions and capital, and explain what each measure tells you."}
+          ],
+          "package": "credit",
+          "reason": "Credit-risk worked cases, interview practice and flashcards support revision of loss drivers, modelling choices and practical explanations.",
+          "practice": "Walk through a credit-loss example and explain which assumption most changes the result."
+        },
+        {
+          "id": "counterparty-risk",
+          "label": "Counterparty risk & XVA",
+          "title": "Follow a trade from exposure to valuation.",
+          "intro": "Build a coherent explanation of exposure, counterparty credit risk and the adjustments used in pricing.",
+          "steps": [
+            {"module": "saccr", "title": "Understand counterparty exposure", "detail": "Explore replacement cost, potential future exposure, netting and collateral."},
+            {"module": "cva", "title": "Connect exposure to CVA risk", "detail": "Study counterparty credit effects and the sensitivities used in SA-CVA."},
+            {"module": "xva", "title": "Explain the valuation adjustments", "detail": "Connect credit, funding, collateral and capital costs to the economics of a trade."}
+          ],
+          "package": "xva",
+          "reason": "The XVA guide and worked cases help you connect the adjustments, while interview questions and flashcards support structured practice.",
+          "practice": "Explain how collateral changes exposure and funding, then describe the effect on a trade's valuation."
+        },
+        {
+          "id": "treasury",
+          "label": "Treasury & ALM",
+          "title": "Explain a bank's funding and rate-risk decisions.",
+          "intro": "Start with the balance sheet, trace the cash needs and connect rate shocks to earnings and economic value.",
+          "steps": [
+            {"module": "treasury-risk", "title": "Understand the balance sheet", "detail": "Explain funding needs, net interest income and the role of funds transfer pricing."},
+            {"module": "liquidity", "title": "Follow the cash under stress", "detail": "Explore LCR, NSFR and cash survival, then discuss possible funding actions."},
+            {"module": "irrbb", "title": "Explain banking-book rate risk", "detail": "Connect yield-curve shocks, deposit behaviour and hedges to EVE and NII."}
+          ],
+          "package": "treasury-risk",
+          "reason": "Treasury worked cases and interview questions help you practise explaining funding, liquidity and balance-sheet decisions together.",
+          "practice": "Present one treasury decision, its effect on earnings and liquidity, and the trade-off you would discuss with ALCO."
+        }
+      ]
+    },
+    {
+      "id": "modelling",
+      "label": "Build practical modelling knowledge",
+      "summary": "Build a curve, test the risks and explain the result.",
+      "routes": [
+        {
+          "id": "modelling",
+          "label": "Practical modelling",
+          "title": "Build from valuation inputs to model behaviour.",
+          "intro": "Begin with discounting and a hands-on curve workflow, then explore sensitivities and the mathematics of uncertain prices.",
+          "steps": [
+            {"module": "yield", "title": "Build and test a yield curve", "detail": "Bootstrap discount factors, infer forwards and check how the curve reprices bonds and swaps."},
+            {"module": "sensitivities", "title": "Measure what moves the value", "detail": "Change rates and other market inputs, compare price changes and interpret the sensitivities."},
+            {"module": "stochastic", "title": "Add the stochastic foundations", "detail": "Explore probability, Brownian motion and Itô calculus. Refresh basic calculus before this step."}
+          ],
+          "package": "yield",
+          "reason": "The Yield Curves package supports your first practical build with a structured guide, worked cases and an offline lab for repeated practice.",
+          "practice": "Reprice an instrument, change one curve assumption and explain the resulting value and risk."
+        }
+      ]
+    },
+    {
+      "id": "treasury",
+      "label": "Develop treasury expertise",
+      "summary": "Connect the balance sheet, liquidity and rate risk.",
+      "routes": [
+        {
+          "id": "treasury",
+          "label": "Treasury expertise",
+          "title": "Connect everyday treasury decisions.",
+          "intro": "Follow the balance sheet through funding, liquidity stress and interest-rate risk, with a practical decision at each stage.",
+          "steps": [
+            {"module": "treasury-risk", "title": "Build the treasury foundation", "detail": "Explore the bank balance sheet, funding costs, net interest income and funds transfer pricing."},
+            {"module": "liquidity", "title": "Test liquidity and funding resilience", "detail": "Work through liquidity ratios, cash survival, collateral and funding concentration."},
+            {"module": "irrbb", "title": "Manage banking-book rate risk", "detail": "Compare EVE and NII under rate shocks, then explore deposits, optionality and hedging."}
+          ],
+          "package": "treasury-risk",
+          "reason": "The Treasury Risk package gives you a broad starting point, combining a professional guide, offline practice and worked treasury cases.",
+          "practice": "Use a worked balance-sheet case to explain a funding action and its effect on liquidity and net interest income."
+        }
+      ]
+    }
+  ]
+}

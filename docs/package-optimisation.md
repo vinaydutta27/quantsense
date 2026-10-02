@@ -8,6 +8,8 @@ Implemented 2 October 2026 on the existing GitHub Pages site.
 - It generates the homepage, package shop, 12 product pages and browser catalogue. It also adds package discovery to existing navigation and extends the sitemap.
 - ₹999 prices were checked against the public QuantSense Topmate storefront on 2 October 2026. Keep this configuration and the Topmate listing in sync. The site points to Topmate for final amounts and purchase terms.
 - The complete free learning directory is preserved from `dist/learning-paths.html`.
+- Edit `content/career-goals.json` and rebuild to maintain goal-based discovery on the homepage and package shop. The three goals provide six ordered paths: four interview areas, practical modelling and treasury expertise. Each route explains one package recommendation, includes its starting knowledge, and links to free lessons and the package preview. The modelling route recommends the Yield Curves package for its first practical stage; a single purchase covers that subject.
+- Goal selection supports keyboard navigation and shareable URL fragments such as `#goal-modelling` or `#goal-interview-credit-risk`. Every path stays readable when JavaScript is disabled.
 - Module offers use `dist/learning-package.js`; they do not change the calculator mathematics.
 - Team wording is the owner's supplied description: “We are a group of bankers working in these fields.” No unverified employers, credentials or endorsements have been added.
 
@@ -36,6 +38,9 @@ The existing GA4 property `G-7S3F8C64KY` is retained. Custom interaction events 
 | `package_sample_open` | Sample PDF, download, free lesson, solution or flashcard opened |
 | `package_readiness_check` | Starting-knowledge checklist changed; count only |
 | `package_checkout_click` | Outbound click to a Topmate product listing |
+| `career_goal_select` | Visitor chooses interview preparation, modelling or treasury |
+| `career_goal_focus_select` | Visitor selects an interview area |
+| `career_path_step` | Visitor follows a free lesson or starts the selected path; this does not indicate completion |
 
 An outbound listing click is **not** a checkout start or confirmed purchase. No `purchase`, `begin_checkout` or revenue event is emitted by this static site.
 
@@ -44,6 +49,8 @@ An outbound listing click is **not** a checkout start or confirmed purchase. No 
 In the existing GA4 account, register event-scoped custom dimensions for `package_id`, `placement`, `sample_type`, and `destination`. Standard ecommerce item fields already identify the products. Create an exploration for product views → sample interactions → Topmate clicks, broken down by item and traffic source. Count users/sessions for funnel rates, not raw repeated clicks. Use click-through as a leading indicator; optimise confirmed paid orders and revenue using Topmate records.
 
 No GA4 or Topmate administrative integration has been configured in this change. If Topmate supports a verified paid-order integration for this account, connect that to a server-side purchase handler with transaction-ID deduplication and refund handling. Do not expose an API secret in browser JavaScript. Confirm consent requirements and cross-domain identifiers before trying to attribute purchases to an individual website session. Do not upload customers' contact details to GA4.
+
+Goal events use only fixed catalogue IDs: `goal_id`, `path_id`, `module_id`, the numeric `step`, and `placement`. Register the ID fields as event-scoped custom dimensions if needed for GA4 reports. Goal recommendations use existing package events with placements such as `homepage_goal_interview_market-risk`, so their package clicks and Topmate visits can be compared with general browsing. Goal events follow the same analytics consent setting.
 
 ### Reconcile confirmed orders now
 
@@ -60,3 +67,5 @@ Compare weekly paid orders, refund-adjusted revenue and outbound clicks per pack
 Commit changes to `main` to run the existing GitHub Pages workflow. The domain remains `quantsense.co`. The legacy `.openai/hosting.json` is not used to deploy this site.
 
 Run `node tests/package-funnel.test.cjs` for buyer journeys, consent, sample calculations, product routing, mobile layout and module functionality. Supply `PLAYWRIGHT_CHROMIUM_EXECUTABLE` if using a system Chromium. `python3 tests/reconcile-orders.test.py` checks payment status, deduplication and refund reconciliation.
+
+Run `node tests/career-goals.test.cjs` for goal recommendations, ordered links, interview areas, keyboard and fragment navigation, layouts from 320px to desktop, consent and the no-JavaScript fallback.
