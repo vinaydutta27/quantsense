@@ -1,0 +1,62 @@
+{
+  "treasury-risk": {
+    "source": "v0.9 review edition, 19 September 2026",
+    "handbookPages": [
+      3,
+      4
+    ],
+    "cards": [
+      {
+        "question": "What is treasury risk management trying to achieve?",
+        "answer": "Ensure the bank can meet obligations when due, maintain reliable funding, manage interest-rate and currency mismatches, preserve resilience under stress and make the economic cost of balance-sheet risk visible."
+      },
+      {
+        "question": "What is the central idea behind Build a bank balance sheet?",
+        "answer": "Treasury connects assets to funding and manages the timing and price of cash."
+      },
+      {
+        "question": "What is a useful core formula or diagnostic for Build a bank balance sheet?",
+        "answer": "Assets = loans + securities + cash; Funding gap = assets - deposits - equity"
+      },
+      {
+        "question": "What is a key implementation control or caveat for Build a bank balance sheet?",
+        "answer": "Separate accounting balance from cash availability; include funding cost, maturity and liquidity characteristics."
+      },
+      {
+        "question": "What is the central idea behind Liquidity versus solvency?",
+        "answer": "Solvency is balance-sheet capacity to absorb losses. Liquidity is ability to meet obligations when due."
+      }
+    ]
+  },
+  "frtb": {
+    "source": "v0.9 review edition, 19 September 2026",
+    "handbookPages": [
+      4,
+      5,
+      6,
+      7
+    ],
+    "cards": [
+      {
+        "question": "What problem does FRTB try to solve?",
+        "answer": "FRTB reforms trading-book market-risk capital so that capital is more risk-sensitive, captures tail and liquidity risk more explicitly, strengthens the trading-book boundary, and constrains internal-model use through desk-level approval and model-performance tests."
+      },
+      {
+        "question": "What are the two principal FRTB approaches for market risk capital?",
+        "answer": "The Standardised Approach (SA) and the Internal Models Approach (IMA). Use of IMA requires supervisory approval; SA remains the fallback and benchmark."
+      },
+      {
+        "question": "At a high level, what are the three components of FRTB SA?",
+        "answer": "Sensitivities-Based Method (SBM) + Default Risk Capital requirement (DRC) + Residual Risk Add-On (RRAO)."
+      },
+      {
+        "question": "What are the three SBM risk measures?",
+        "answer": "Delta, vega and curvature."
+      },
+      {
+        "question": "How many SBM risk classes are there?",
+        "answer": "Seven: GIRR; CSR non-securitisations; CSR securitisations non-CTP; CSR securitisations CTP; equity; commodity; and FX."
+      }
+    ]
+  }
+}

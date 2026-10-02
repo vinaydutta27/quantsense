@@ -1,5 +1,5 @@
 const fs=require('fs'),assert=require('node:assert/strict');
-const {chromium}=require('/Users/vinaydutta/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const {chromium}=require('playwright');
 const files=fs.readdirSync('dist').filter(name=>name.endsWith('.html'));
 for(const file of files){
   const html=fs.readFileSync('dist/'+file,'utf8');
@@ -9,10 +9,10 @@ for(const file of files){
   assert(html.indexOf('G-7S3F8C64KY')>html.indexOf('<head>')&&html.indexOf('G-7S3F8C64KY')<html.indexOf('</head>'),file+' head placement');
 }
 (async()=>{
-  const browser=await chromium.launch({executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',headless:true});
+  const browser=await chromium.launch({executablePath:process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE||undefined,headless:true,args:['--no-sandbox']});
   const context=await browser.newContext();const page=await context.newPage();
   await page.route('https://www.googletagmanager.com/**',route=>route.abort());
-  await page.goto('http://localhost:8770/',{waitUntil:'domcontentloaded'});
+  await page.goto(process.env.QS_TEST_ORIGIN||'http://localhost:8770/',{waitUntil:'domcontentloaded'});
   assert.equal(await page.locator('.analytics-consent').count(),1);
   assert((await page.evaluate(()=>dataLayer)).some(x=>x[0]==='consent'&&x[1]==='default'&&x[2].analytics_storage==='denied'));
   await page.getByRole('button',{name:'Allow analytics'}).click();

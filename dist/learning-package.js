@@ -1,65 +1,41 @@
 (() => {
-  const packages = {
-    sensitivities: ['2307567', 'Risk Sensitivities', 'interpret price changes, compare sensitivity estimates and reason about hedges'],
-    stochastic: ['2308017', 'Stochastic Calculus', 'connect probability and stochastic models with financial valuation'],
-    yield: ['2308066', 'Yield Curves', 'follow market quotes through curve construction to pricing and risk'],
-    cva: ['2308043', 'SA-CVA', 'connect CVA sensitivities and eligible hedges with risk capital'],
-    saccr: ['2308045', 'SA-CCR', 'trace trades, netting and collateral through the exposure calculation'],
-    xva: ['2308046', 'XVA', 'reason through the credit, funding and margin effects on valuation'],
-    irrbb: ['2308049', 'IRRBB', 'connect balance-sheet cash flows and rate shocks with earnings and economic value'],
-    liquidity: ['2308062', 'Liquidity & Funding Risk', 'connect liquidity ratios with cash-flow timing and funding decisions'],
-    credit: ['2308058', 'Credit Risk', 'connect credit modelling choices with portfolio risk and IFRS 9 expected losses'],
-    simm: ['2308063', 'SIMM', 'follow portfolio sensitivities through initial margin calculations'],
-    'treasury-risk': ['2308038', 'Treasury Risk', 'weigh cash, funding and balance-sheet decisions together'],
-    frtb: ['2307098', 'FRTB SA & IMA', 'connect market-risk concepts with capital calculations and implementation questions']
-  };
-  const key = location.pathname.split('/').filter(Boolean).pop()?.replace(/\.html$/, '');
-  const pack = packages[key];
+  const key = location.pathname.split('/').pop().replace(/\.html$/, '');
+  const pack = window.QSPackages?.packages.find(p => p.key === (key === 'regulation' ? 'frtb' : key));
   const guide = document.querySelector('main .module-guide');
   if (!pack || !guide || document.getElementById('learning-package')) return;
-
-  const [id, title, outcome] = pack;
-  const url = `https://topmate.io/quantsense/${id}`;
-  const style = document.createElement('link');
-  style.rel = 'stylesheet';
-  style.href = 'learning-package.css';
-  document.head.append(style);
-
-  const section = document.createElement('section');
-  section.id = 'learning-package';
-  section.className = 'learning-package';
-  section.setAttribute('aria-labelledby', 'learning-package-title');
-  section.innerHTML = `
-    <div class="learning-package-copy">
-      <span class="learning-package-label">OPTIONAL PAID LEARNING PACKAGE</span>
-      <h2 id="learning-package-title">Build practical understanding of ${title}</h2>
-      <p>The ${title} learning package can help you develop a practical understanding of this subject. Use its structured study material and exercises to ${outcome}.</p>
-      <p class="learning-package-note">All lessons and visualisations in this module remain free to use. The package is an optional next step.</p>
-      <div class="learning-package-readiness" role="note" aria-labelledby="learning-package-readiness-title">
-        <span class="learning-package-readiness-label">BEFORE YOU BUY</span>
-        <h3 id="learning-package-readiness-title">Advanced users only</h3>
-        <p>This package assumes you already understand the fundamentals of ${title} and are ready for deeper, practical study.</p>
-        <p><strong>New to the subject? Please don’t buy this package yet.</strong> Spend time with the free lessons and interactive tools on this page first. Come back when you can explain the fundamentals with confidence.</p>
-      </div>
-      <a class="learning-package-cta" href="${url}" target="_blank" rel="noopener noreferrer sponsored">View the ${title} package <span aria-hidden="true">↗</span><span class="learning-package-sr"> (opens Topmate in a new tab)</span></a>
-    </div>
-    <details class="learning-package-preview">
-      <summary>Preview the package and contents</summary>
-      <p>View the current contents and price on Topmate. Opening this preview loads a page from Topmate.</p>
-      <div class="learning-package-frame"></div>
-      <p>If the preview is unavailable, <a href="${url}" target="_blank" rel="noopener noreferrer sponsored">open the package page on Topmate</a>.</p>
-    </details>`;
-  guide.after(section);
-
-  // Contact Topmate only when a visitor chooses to open the preview.
-  const preview = section.querySelector('details');
-  preview.addEventListener('toggle', () => {
-    if (!preview.open || preview.querySelector('iframe')) return;
-    const frame = document.createElement('iframe');
-    frame.src = url;
-    frame.title = `${title} learning package on Topmate`;
-    frame.loading = 'lazy';
-    frame.referrerPolicy = 'strict-origin-when-cross-origin';
-    preview.querySelector('.learning-package-frame').append(frame);
+  ['packages.css','learning-package.css'].forEach(href => {
+    const link = document.createElement('link'); link.rel = 'stylesheet'; link.href = href; document.head.append(link);
   });
+  const price = '₹' + window.QSPackages.price.toLocaleString('en-IN');
+  const offer = document.createElement('section');
+  offer.id = 'learning-package';
+  offer.className = 'learning-package';
+  offer.dataset.package = pack.key;
+  offer.dataset.packageView = 'offer';
+  offer.dataset.placement = key === 'regulation' ? 'regulation_intro' : 'module_intro';
+  offer.setAttribute('aria-labelledby', 'learning-package-title');
+  const attrs = (action,place=offer.dataset.placement) => `data-package="${pack.key}" data-package-action="${action}" data-placement="${place}"`;
+  offer.innerHTML = `<div class="lp-heading"><div><span class="qs-kicker">Optional learning package · ${pack.title}</span><h2 id="learning-package-title">${pack.headline}</h2></div><div class="qs-price">${price}<small> one-time</small></div></div>
+    <ul class="lp-outcomes">${pack.outcomes.map(o=>`<li>${o}</li>`).join('')}</ul>
+    <p class="lp-includes"><strong>Inside:</strong> ${pack.guidePages?pack.guidePages+'-page guide':'FRTB handbook'} · 100 flashcards · offline lab · worked cases &amp; interview practice</p>
+    <div class="lp-readiness"><strong>Before you buy:</strong> ${pack.prerequisites} <a href="package-${pack.key}.html#contents" ${attrs('select')}>See full contents</a> · <a href="${pack.starter}.html">Review the free foundations</a></div>
+    <div class="qs-actions"><a class="qs-btn" href="https://topmate.io/quantsense/${pack.id}" target="_blank" rel="noopener noreferrer sponsored" ${attrs('checkout')}>Buy on Topmate · ${price} ↗</a><a class="qs-btn qs-btn-secondary" href="package-${pack.key}.html#preview" ${attrs('preview')}>${pack.sample?'See real sample materials':'Explore the package & free preview'} →</a></div>
+    <p class="learning-package-note">All lessons and visualisations in this module remain free. The paid package adds downloadable study and revision materials. Digital delivery through Topmate; check the final price and terms before payment.</p>`;
+  guide.after(offer);
+  const anchor = key === 'regulation' ? document.querySelector('#comparator') : document.getElementById('learning');
+  if (!anchor) return;
+  const next = document.createElement('section');
+  next.id = 'lesson-package'; next.className = 'lesson-package';
+  next.dataset.package = pack.key; next.dataset.packageView = 'offer'; next.dataset.placement = key === 'regulation' ? 'regulation_topic' : 'lesson_end';
+  next.innerHTML = `<div><span class="qs-kicker">Put the idea into practice</span><h2></h2><p>${key==='regulation'?'Connect the regulatory topic with worked FRTB calculations, model-performance concepts and implementation questions.':pack.context}</p></div><div class="lp-next-actions"><a class="qs-btn" href="package-${pack.key}.html" ${attrs('select',next.dataset.placement)}>Explore the ${pack.title} package →</a><span>${price} · guide, offline lab and revision resources</span></div>`;
+  anchor.after(next);
+  const title = document.getElementById(key === 'regulation' ? 'topic-name' : 'title');
+  const refresh = () => {
+    const lesson = title?.textContent.trim();
+    next.querySelector('h2').textContent = lesson ? `Go further with “${lesson}”` : `Build your ${pack.title} study routine`;
+    next.dataset.lesson = (lesson || 'module').slice(0,80);
+  };
+  refresh();
+  if (title) new MutationObserver(refresh).observe(title, {childList:true,subtree:true,characterData:true});
+  window.addEventListener('hashchange', refresh);
 })();
