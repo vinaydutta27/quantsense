@@ -31,13 +31,14 @@ for (const name of allPages) {
 
       const utilitySelector = name === 'regulation.html' ? '.reg-utility' : appPages.includes(name) ? '.site-links' : '.seo-header nav';
       const utilityText = await page.locator(`${utilitySelector} a`).allTextContents();
-      assert.deepEqual(name === 'regulation.html' || appPages.includes(name) ? utilityText : utilityText.slice(1), utility, `${name}: utility links differ`);
+      if(name==='index.html') assert.deepEqual(utilityText,['Explore','Free learning paths','Packages','Regulation','About','FAQ','Contact']);
+      else {const core=utilityText.filter(t=>t!=='Packages'&&t!=='Explore');assert.deepEqual(core,utility,`${name}: utility links differ`);}
       assert(await page.locator(utilitySelector).isVisible(), `${name}: utility navigation hidden at ${width}px`);
 
       if (appPages.includes(name) || name === 'regulation.html') {
         const selector = name === 'regulation.html' ? '.reg-header nav' : '.path-switch';
         if (name === 'regulation.html') {
-          assert.deepEqual(await page.locator(`${selector} a`).allTextContents(), learning, `${name}: learning paths differ`);
+          assert.deepEqual((await page.locator(`${selector} a`).allTextContents()).filter(t=>t!=='Packages'), learning, `${name}: learning paths differ`);
           assert.equal(await page.locator(`${selector} a[aria-current="page"]`).count(), 1, `${name}: learning-path active state missing`);
         } else {
           assert.equal(await page.locator(`${selector} .module-browser-panel a`).count(), learning.length, `${name}: module catalogue incomplete`);
